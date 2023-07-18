@@ -1,0 +1,190 @@
+from readFasta import *
+import matplotlib.pyplot as plt
+import numpy as np
+from matplotlib.patches import Polygon
+
+#Go to countGenomeVisual() to create a chart that can be interacted with
+
+'''
+Gene
+'''
+def kmerSequence(fileName, geneName, step):
+    file = readFasta(fileName)
+    gene = file[geneName]
+    numKmer = int(len(gene) / step)
+    kmers = []
+    for kmer in range(numKmer):
+        kmerSeq = gene[kmer: kmer + step]
+        kmers += [kmerSeq]
+    return kmers
+
+def kmerCount(fileName, geneName, step):
+    kmers = kmerSequence(fileName, geneName, step)
+    kmerSequenceCount = {}
+    for kmer in kmers:
+        if (kmer in kmerSequenceCount.keys()):
+            kmerSequenceCount[kmer] += 1
+        else:
+            kmerSequenceCount[kmer] = 1
+    return kmerSequenceCount        
+
+def countArray(fileName, geneName, step):
+    kmerSequenceCount = kmerCount(fileName, geneName, step)
+    countsArray = {}
+    for kmer in kmerSequenceCount:
+        count = kmerSequenceCount[kmer]
+        if (count in countsArray.keys()):
+            countsArray[count] += 1
+        else:
+            countsArray[count] = 1
+    return countsArray
+
+def countVisual(fileName, geneName, step):
+    countsArray = countArray(fileName, geneName, step)
+    counts = []
+    frequencies = []
+    for count in countsArray:
+        counts += [count]
+        frequency = countsArray[count]
+        frequencies += [frequency]
+    plt.scatter(frequencies, counts)
+    plt.xlabel("%s-mer frequency" % (step))
+    plt.ylabel("Count")
+    plt.show()
+
+
+'''
+Genome
+'''
+
+def kmerGenomeCount(fileName, step):
+    file = readFasta(fileName)
+    kmerSequenceArray = {}
+    for gene in file:
+        kmers = kmerSequence(fileName, gene, step)
+        for kmer in kmers:
+            if (kmer in kmerSequenceArray.keys()):
+                kmerSequenceArray[kmer] += 1
+            else:
+                kmerSequenceArray[kmer] = 1
+    return kmerSequenceArray
+
+
+def countGenome(fileName, step):
+    kmerSequenceArray = kmerGenomeCount(fileName, step)
+    countsArray = {}
+    for kmer in kmerSequenceArray:
+        count = kmerSequenceArray[kmer]
+        if (count in countsArray.keys()):
+            countsArray[count] += 1
+        else:
+            countsArray[count] = 1
+    return countsArray
+
+def findKmerWithCount(fileName, step, count):
+    kmerArray = kmerGenomeCount(fileName, step)
+    kmerSequence = []
+    for kmer in kmerArray:
+        if (kmerArray[kmer] == count):
+            kmerSequence += [kmer]
+    return kmerSequence
+
+
+# file name is the name of the data set
+# step is the length of the sequence
+def countGenomeVisual(fileName, step):
+    countsArray = countGenome(fileName, step)
+    counts = []
+    frequencies = []
+    for count in countsArray:
+        counts += [count]
+        frequency = countsArray[count]
+        frequencies += [frequency]
+    color = np.random.randint(1, 5)
+    colors = len(frequencies) * [color]
+    norm = plt.Normalize(1, 4)
+    cmap = plt.cm.PiYG
+    figure, axis = plt.subplots()
+    scatter = axis.scatter(frequencies, counts)
+    annotation = axis.annotate(text = '', xy = (0, 0), xytext = (15, 15), textcoords = 'offset points', bbox = {'boxstyle': 'round', 'fc': 'w'}, arrowprops = {'arrowstyle': '->'})
+    annotation.set_visible(False)
+
+    def motion_hover(event):
+        annotation_visibility = annotation.get_visible()
+        if event.inaxes == axis:
+            is_contained, annotation_index = scatter.contains(event)
+            if is_contained:
+                data_point_location = scatter.get_offsets()[annotation_index['ind'][0]]
+                annotation.xy = data_point_location
+                kmerSequence = findKmerWithCount(fileName, step, data_point_location[1])
+                kmerSeqString = ''
+                for kmer in kmerSequence:
+                    kmerSeqString += kmer + ' '
+                coordinate_label = '({0:.2f}, {1:.2f})'.format(data_point_location[0], data_point_location[1])
+                sequence_label = kmerSeqString
+                annotation.set_text(coordinate_label + '\n' + sequence_label)
+                annotation.get_bbox_patch().set_facecolor(cmap(norm(colors[annotation_index['ind'][0]])))
+                annotation.set_alpha(0.4)
+
+                annotation.set_visible(True)
+                figure.canvas.draw_idle()
+        else:
+            if annotation_visibility:
+                annotation.set_visible(False)
+                figure.canvas.draw_idle()
+    figure.canvas.mpl_connect('motion_notify_event', motion_hover)
+    plt.xlabel("%s-mer frequency" % (step))
+    plt.ylabel("Count")
+    plt.show()
+
+#countGenomeVisual('22CPs.fasta', 5)
+
+def countCompareGenomeVisual(fileName1, fileName2, step):
+    countsArray1 = countGenome(fileName1, step)
+    countsArray2 = countGenome(fileName2, step)
+    counts1 = []
+    frequencies1 = []
+    counts2 = []
+    frequencies2 = []
+    for count in countsArray1:
+        frequency = countsArray1[count]
+        counts1 += [count]
+        frequencies1 += [frequency]
+    for count in countsArray2:
+        frequency = countsArray2[count]
+        counts2 += [count]
+        frequencies2 += [frequency]
+    figure, (axis1, axis2) = plt.subplots(nrows = 1, ncols = 2, sharey = True)
+    axis1.scatter(frequencies1, counts1)
+    axis2.scatter(frequencies2, counts2)
+    axis1.set_title(fileName1)
+    axis2.set_title(fileName2)
+    plt.suptitle('%s-mer frequency' % (step))
+    plt.ylabel("Count")
+    plt.show()
+
+countCompareGenomeVisual('1514RdRPs.fasta', '1526RNA_CPs.fasta', 7)
+
+def countMaxMin(fileName, step):
+    kmerArray = kmerGenomeCount(fileName, step)
+    minCount = 10000
+    maxCount = -1
+    for kmer in kmerArray:
+        count = kmerArray[kmer]
+        if (count <= minCount):
+            minCount = count
+        if (count >= maxCount):
+            maxCount = count
+    minKmerFrequency = []
+    maxKmerFrequency = []
+    for kmer in kmerArray:
+        if (kmerArray[kmer] == minCount):
+            minKmerFrequency += [kmer]
+        if (kmerArray[kmer] == maxCount):
+            maxKmerFrequency += [kmer]
+    return maxKmerFrequency, maxCount
+
+#countMaxMin("newRNA.txt", 8)
+#print(kmerGenomeCount("newRNA.txt", 8))
+#print(countGenome('newRNA.txt', 8))
+#print("The highest frequency of RNA is ", maxCount, " of", maxKmerFrequency)
