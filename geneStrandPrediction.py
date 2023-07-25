@@ -1,3 +1,8 @@
+'''
+This program predicts the direction, represented in codon-ending bias, of CP and Rep genes. 
+The direction of CP and Rep genes can help predict the sense of the genome. The name of the genome, the direction of CP, the direction of Rep, and the sense of genome can be downloaded as a csv file and seen in the terminal.
+'''
+
 from readFasta import readFasta
 import numpy as np
 import matplotlib.pyplot as plt
