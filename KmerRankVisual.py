@@ -1,3 +1,7 @@
+'''
+This program analyzes the kmer rank between CP and Rep gene of the same genome. 
+Please refer to the KmerRankCPRepVisual file to see the latest version of kmer rank analysis.
+'''
 import re
 import sys
 import pandas as pd
