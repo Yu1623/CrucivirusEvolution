@@ -1,3 +1,8 @@
+'''
+This file analyze kmer rank for the similarity of CP and Rep genes of genomes.
+The program makes a line graph that visualizes the frequency of the similarity percent between CP and Rep genes.
+'''
+
 import numpy as np
 import matplotlib.pyplot as plt
 import re
@@ -45,10 +50,3 @@ def kmerRankShaded(fileName):
 percentsSimilar, countsSimilar = kmerRankShaded("kmerRankCruci.txt")
 print(percentsSimilar)
 print(countsSimilar)
-
-'''
-x = [6.34e-05, 6.15e-05, 6.23e-05, 6.89e-05, 6.23e-05, 6.47e-05, 6.34e-05, 6.82e-05, 6.79e-05, 6.21e-05, 6.38e-05, 6.17e-05, 6.54e-05, 6.59e-05]
-y = [1, 2, 4, 1, 2, 1, 1, 1, 1, 2, 4, 2, 1, 1]
-plt.plot(x, y)
-plt.show()
-'''    
