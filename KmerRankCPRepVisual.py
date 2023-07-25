@@ -50,3 +50,75 @@ def kmerRankShaded(fileName):
 percentsSimilar, countsSimilar = kmerRankShaded("kmerRankCruci.txt")
 print(percentsSimilar)
 print(countsSimilar)
+
+
+def kmerRankShadedCompare(Crucifile, RNAfile, DNAfile):
+    kmerRankCruci = readKmerRanking(Crucifile)
+    kmerRankRNA = readKmerRanking(RNAfile)
+    kmerRankDNA = readKmerRanking(DNAfile)
+    percentsCountsCruci = {}
+    percentsCountsRNA = {}
+    percentsCountsDNA = {}
+    for kmer in kmerRankCruci:
+        percentSimilar = round(float(kmerRankCruci[kmer]), 7)
+        if (percentSimilar in percentsCountsCruci.keys()):
+            percentsCountsCruci[percentSimilar] += 1
+        else:
+            percentsCountsCruci[percentSimilar] = 1
+    newpercentsCountsCruci = sorted(list(percentsCountsCruci))
+    updatedpercentsCountsCruci = {}
+    for percentSimilar1 in newpercentsCountsCruci:
+        for percentSimilar2 in percentsCountsCruci:
+            if (percentSimilar1 == percentSimilar2):
+                updatedpercentsCountsCruci[percentSimilar1] = percentsCountsCruci[percentSimilar2]
+    percentsSimilarCruci = []
+    countsSimilarCruci = []
+    for percentSimilar in updatedpercentsCountsCruci:
+        percentsSimilarCruci += [percentSimilar]
+        countsSimilarCruci += [updatedpercentsCountsCruci[percentSimilar]]
+
+    for kmer in kmerRankRNA:
+        percentSimilar = round(float(kmerRankRNA[kmer]), 7)
+        if (percentSimilar in kmerRankRNA.keys()):
+            percentsCountsRNA[percentSimilar] += 1
+        else:
+            percentsCountsRNA[percentSimilar] = 1
+    newpercentsCountsRNA = sorted(list(percentsCountsRNA))
+    updatedpercentsCountsRNA = {}
+    for percentSimilar1 in newpercentsCountsRNA:
+        for percentSimilar2 in percentsCountsRNA:
+            if (percentSimilar1 == percentSimilar2):
+                updatedpercentsCountsRNA[percentSimilar1] = percentsCountsRNA[percentSimilar2]
+    percentsSimilarRNA = []
+    countsSimilarRNA = []
+    for percentSimilar in updatedpercentsCountsRNA:
+        percentsSimilarRNA += [percentSimilar]
+        countsSimilarRNA += [updatedpercentsCountsRNA[percentSimilar]]
+
+    for kmer in kmerRankDNA:
+        percentSimilar = round(float(kmerRankDNA[kmer]), 7)
+        if (percentSimilar in percentsCountsDNA.keys()):
+            percentsCountsDNA[percentSimilar] += 1
+        else:
+            percentsCountsDNA[percentSimilar] = 1
+    newpercentsCountsDNA = sorted(list(percentsCountsDNA))
+    updatedpercentsCountsDNA = {}
+    for percentSimilar1 in newpercentsCountsDNA:
+        for percentSimilar2 in percentsCountsDNA:
+            if (percentSimilar1 == percentSimilar2):
+                updatedpercentsCountsDNA[percentSimilar1] = percentsCountsDNA[percentSimilar2]
+    percentsSimilarDNA = []
+    countsSimilarDNA = []
+    for percentSimilar in updatedpercentsCountsDNA:
+        percentsSimilarDNA += [percentSimilar]
+        countsSimilarDNA += [updatedpercentsCountsDNA[percentSimilar]]
+        
+    plt.plot(percentsSimilarCruci, countsSimilarCruci)
+    plt.plot(percentsSimilarRNA, countsSimilarRNA)
+    plt.plot(percentsSimilarDNA, countsSimilarDNA)
+    plt.xlabel("Percent Similar between CP and Rep")
+    plt.ylabel("Count")
+    plt.title("The Count of each percent similar between CP and Rep")
+    plt.legend(["Cruci", "RNA", "DNA"])
+    plt.show()
+kmerRankShadedCompare("kmerRankCruci.txt", "kmerRankRNA.txt", "kmerRankDNA.txt")
