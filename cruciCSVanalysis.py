@@ -1,3 +1,7 @@
+'''
+All of the functions are moved to geneStrandPrediction
+'''
+
 import pandas as pd
 from readFasta import readFasta
 from geneStrandPrediction import genomeSenseTable
