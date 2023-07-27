@@ -21,8 +21,8 @@ def findGene(fileName, genomeName):
 Identify the genomes that have unexpected genome sense
 '''
 
-def genomeSenseSurprising():
-    accuracy, incorrectPrediction = geneStrandPrediction.checkPrediction()
+def genomeSenseSurprising(csvfileName, CPfileName, RepfileName):
+    accuracy, incorrectPrediction = geneStrandPrediction.checkPrediction(csvfileName, CPfileName, RepfileName)
     percentsSimilar = 0
     genomeSimilar = []
     for genome in incorrectPrediction:
