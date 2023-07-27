@@ -8,6 +8,11 @@ import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.patches import Polygon
 
+'''
+Input: file name and gene name of the gene that the program will find the kmer sequences of, and the step, or the length of kmer
+Output: an array of kmers from the gene
+'''
+
 def kmerSequence(fileName, geneName, step):
     file = readFasta(fileName)
     gene = file[geneName]
@@ -17,6 +22,11 @@ def kmerSequence(fileName, geneName, step):
         kmerSeq = gene[kmer: kmer + step]
         kmers += [kmerSeq]
     return kmers
+
+'''
+Input: file name and gene name, and the length of the kmer
+Output: an associative array of each kmer combination in the gene and the number of times, or count, that they showed up
+'''
 
 def kmerCount(fileName, geneName, step):
     kmers = kmerSequence(fileName, geneName, step)
@@ -28,6 +38,11 @@ def kmerCount(fileName, geneName, step):
             kmerSequenceCount[kmer] = 1
     return kmerSequenceCount        
 
+'''
+Input: file name and gene name and the length of kmer
+Output: an associative array of the count of kmer sequences and the number of kmer sequences that have the count.
+'''
+
 def countArray(fileName, geneName, step):
     kmerSequenceCount = kmerCount(fileName, geneName, step)
     countsArray = {}
@@ -38,6 +53,11 @@ def countArray(fileName, geneName, step):
         else:
             countsArray[count] = 1
     return countsArray
+
+'''
+Input: the file name and the gene name and the length of kmer
+Output: scatter plot of the number of kmer sequences against the count that they showed up in the gene
+'''
 
 def countVisual(fileName, geneName, step):
     countsArray = countArray(fileName, geneName, step)
@@ -52,6 +72,11 @@ def countVisual(fileName, geneName, step):
     plt.ylabel("Count")
     plt.show()
 
+'''
+Input: file name and length of kmer
+Output: an associative array of kmer sequences and the count that they showed up in all the genes of the file
+'''
+
 def kmerGenomeCount(fileName, step):
     file = readFasta(fileName)
     kmerSequenceArray = {}
@@ -64,6 +89,10 @@ def kmerGenomeCount(fileName, step):
                 kmerSequenceArray[kmer] = 1
     return kmerSequenceArray
 
+'''
+Input: filename and length of kmer
+Output: an associative array of the count of kmer sequences and the number of kmer sequences that have the count
+'''
 
 def countGenome(fileName, step):
     kmerSequenceArray = kmerGenomeCount(fileName, step)
@@ -76,6 +105,11 @@ def countGenome(fileName, step):
             countsArray[count] = 1
     return countsArray
 
+'''
+Input: the file name and the length of kmer and the count of the kmer that the program finds
+Output: the kmer sequence that has the count
+'''
+
 def findKmerWithCount(fileName, step, count):
     kmerArray = kmerGenomeCount(fileName, step)
     kmerSequence = []
@@ -83,6 +117,11 @@ def findKmerWithCount(fileName, step, count):
         if (kmerArray[kmer] == count):
             kmerSequence += [kmer]
     return kmerSequence
+
+'''
+Input: file name and length of kmer
+Output: a scatter plot of the number of kmer sequences against the count that they showed up
+'''
 
 def countGenomeVisual(fileName, step):
     countsArray = countGenome(fileName, step)
@@ -129,6 +168,11 @@ def countGenomeVisual(fileName, step):
     plt.ylabel("Count")
     plt.show()
 
+'''
+Input: names of two files that will be compared and the length of kmer
+Output: two scatterplots that shows the number of kmer sequences and their corresponding count for each file
+'''
+
 def countCompareGenomeVisual(fileName1, fileName2, step):
     countsArray1 = countGenome(fileName1, step)
     countsArray2 = countGenome(fileName2, step)
@@ -153,6 +197,11 @@ def countCompareGenomeVisual(fileName1, fileName2, step):
     plt.ylabel("Count")
     plt.show()
 
+'''
+Input: names of two files that will be compared and the length of kmer
+Output: scatterplot showing the number of kmer sequences that all have the same count with each point for each file with the data of one file overlapping the data of the other file
+'''
+
 def compareGenomeCountSameChart(fileName1, fileName2, step):
     countsArray1 = countGenome(fileName1, step)
     countsArray2 = countGenome(fileName2, step)
@@ -172,6 +221,11 @@ def compareGenomeCountSameChart(fileName1, fileName2, step):
     plt.xlabel("Frequency")
     plt.ylabel("Count")
     plt.show()
+
+'''
+Input: names of two files that will be compared and the length of kmer
+Output: dot plot with each point indicating a number of kmer sequences that share a count for each file with the data of the files in the same graph
+'''
 
 def genomeCountDotCompare(fileName1, fileName2, step):
     kmerCount1 = kmerGenomeCount(fileName1, step)
@@ -194,6 +248,11 @@ def genomeCountDotCompare(fileName1, fileName2, step):
     figure.update_traces(mode = 'markers', marker = dict(line_width = 1, symbol = 'circle', size = 10))
     figure.update_layout(title = "The number of times each kmer sequence appear in the gene", xaxis=dict(showgrid = False, showline = True, linecolor = 'rgb(102, 102, 101)', tickfont_color = 'rgb(102, 102, 101)', showticklabels = True, dtick = 'outside', tickcolor = 'rgb(102, 102, 101)'), margin = dict(l = 140, r = 40, b = 50, t = 80), legend = dict(font_size = 10, yanchor = 'middle', xanchor = 'right'), width = 800, height = 600, paper_bgcolor = 'white', plot_bgcolor = "white", hovermode = 'closest')
     figure.show()
+
+'''
+Input: file name and length of kmer
+Output: the kmer sequences with the highest count and the highest count
+'''
 
 def countMaxMin(fileName, step):
     kmerArray = kmerGenomeCount(fileName, step)
