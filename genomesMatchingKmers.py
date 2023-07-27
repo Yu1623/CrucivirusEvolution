@@ -1,5 +1,14 @@
+'''
+Purpose: create a line plot of the shared kmer sequences and their count between two genomes
+'''
+
 from readFasta import readFasta
 import matplotlib.pyplot as plt
+
+'''
+Input: names of two files and names of two genes, length of kmer
+Output: arrays of kmer sequences
+'''
 
 def kmerSequence(fileName1, fileName2, genomeName1, genomeName2, step):
     file1 = readFasta(fileName1)
@@ -15,6 +24,11 @@ def kmerSequence(fileName1, fileName2, genomeName1, genomeName2, step):
     for kmer in range(numKmers2):
         kmers2 += [genome2[kmer : kmer + step]]
     return kmers1, kmers2
+
+'''
+Input: names of the two files, names of the two genomes, length of kmer
+Output: associative array with the shared kmer sequences and the count
+'''
 
 def genomeskmerMatch(fileName1, fileName2, genomeName1, genomeName2, step):
     kmers1, kmers2 = kmerSequence(fileName1, fileName2, genomeName1, genomeName2, step)
@@ -35,6 +49,11 @@ def genomeskmerMatch(fileName1, fileName2, genomeName1, genomeName2, step):
                         kmerCounts[kmer1] = 1
     return kmerCounts
 #print(genomeskmerMatch("885crucis.fasta", "Cruci_CruV_244", "Cruci_CruV_336", 7)) 
+
+'''
+Input: names of the two files, names of the two genomes, length of kmer
+Output: line graph with the shared kmer sequences and the count
+'''
 
 def genomeskmerMatchVisual(fileName1, fileName2, genomeName1, genomeName2, step):
     kmerCounts = genomeskmerMatch(fileName1, fileName2, genomeName1, genomeName2, step)
