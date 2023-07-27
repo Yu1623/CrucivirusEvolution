@@ -1,6 +1,15 @@
+'''
+Purpose: make a heatmap for the percent of matching kmer sequences between genomes of two virus types
+'''
+
 from readFasta import readFasta
 import seaborn as sns
 import matplotlib.pyplot as plt
+
+'''
+Input: DNA file name, crucivirus file name, and length of kmer
+Output: matrix of the percents of shared kmer sequences between each pair of DNA and crucivirus genomes and the names of DNA genomes and the names of crucivirus genomes
+'''
 
 def virusKmerMatch(DNAfileName, CrucifileName, step):
     DNAfile = readFasta(DNAfileName)
@@ -58,6 +67,11 @@ def virusKmerMatch(DNAfileName, CrucifileName, step):
                 percentsMatch[i][l] = percentMatch
                 print(i, l, percentMatch)
     return percentsMatch, DNAnames, Crucinames
+
+'''
+Input: DNA file name, crucivirus file name, length of kmer
+Output: heatmap showing the percents of shared kmer sequences of every pair of DNA and crucivirus genomes
+'''
 
 def virusKmerVisual(DNAfileName, CrucifileName, step):
     percentsMatched, DNAnames, Crucinames = virusKmerMatch(DNAfileName, CrucifileName, step)
