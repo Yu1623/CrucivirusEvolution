@@ -18,8 +18,9 @@ def findGene(fileName, genomeName):
     return gene
 
 '''
-Identify the genomes that have unexpected genome sense that are different from the prediction
+Identify the genomes that have unexpected genome sense
 '''
+
 def genomeSenseSurprising():
     accuracy, incorrectPrediction = geneStrandPrediction.checkPrediction()
     percentsSimilar = 0
