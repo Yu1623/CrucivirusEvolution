@@ -59,13 +59,13 @@ def geneStrandPrediction(fileName, geneName):
                 bias = "T"
             else:
                 bias = "C"
-    return bias
+    return bias, percenta, percentt
 
 def geneStrandsPrediction(fileName):
     genes = readFasta(fileName)
     biases = {}
     for geneName in genes:
-        bias = geneStrandPrediction(fileName, geneName)
+        bias, percenta, percentt = geneStrandPrediction(fileName, geneName)
         biases[geneName] = bias
     return biases
 
@@ -94,27 +94,86 @@ def genomeSensePrediction(CPfileName, RepfileName):
                 genomeNames += [CPgeneName.split("_-_")[0]]
                 percentAmbisense = ambisense / len(CPbiases)
     return percentAmbisense, CPgenes, Repgenes, GenomeSense, genomeNames
-#print(geneStrandsPrediction("22CPs.fasta"))
-#print(geneStrandsPrediction("22Reps.fasta"))
-#print(genomeSensePrediction("22CPs.fasta", "22Reps.fasta"))
 
-percentAmbisense, CPgenes, Repgenes, GenomeSense, genomeNames = genomeSensePrediction("879CPs.fasta", "855Reps.fasta")
+def genomeSenseTable(CPfile, Repfile):
+    CPgenes, Repgenes, GenomeSense, genomeNames, CPending, Repending = genomeSensePrediction(CPfile, Repfile)
+    rows = []
+    for genome in genomeNames:
+        rows += [genome]
+    data = np.array([[column for column in range(4)] for row in range(len(rows))], dtype = object)
+    for i in range(len(data[:, 0])):
+        data[i, 0] = rows[i]
+    for i in range(len(data[:, 1])):
+        data[i, 1] = CPgenes[i]
+    for i in range(len(data[:, 2])):
+        data[i, 2] = Repgenes[i]
+    for i in range(len(data[:, 3])):
+        data[i, 3] = GenomeSense[i]
+    columns = ['Genome name', 'CP', 'Rep', 'Genome']
+    dict = {'Genome Name': genomeNames, 'CP': CPgenes, 'Rep': Repgenes, 'Genome': GenomeSense}
 
-rows = []
-for genome in genomeNames:
-    rows += [genome]
-data = np.array([[column for column in range(4)] for row in range(len(rows))], dtype = object)
-for i in range(len(data[:, 0])):
-    data[i, 0] = rows[i]
-for i in range(len(data[:, 1])):
-    data[i, 1] = CPgenes[i]
-for i in range(len(data[:, 2])):
-    data[i, 2] = Repgenes[i]
-for i in range(len(data[:, 3])):
-    data[i, 3] = GenomeSense[i]
-columns = ['Genome name', 'CP', 'Rep', 'Genome']
-dict = {'Genome Name: ': genomeNames, 'CP': CPgenes, 'Rep': Repgenes, 'Genome': GenomeSense}
+    df = pd.DataFrame(dict)
+    return dict
 
-df = pd.DataFrame(dict)
-pd.DataFrame(dict).to_csv('GenomeSensePrediction.csv')
-print(df.to_markdown())
+def readCSV(fileName):
+    f = open(fileName, 'r')
+    lines = f.readlines()
+    names = []
+    sequenceNames = []
+    lengths = []
+    directions = []
+    documentNames = []
+    types = []
+    sources = []
+    for i in range(len(lines)):
+        line = lines[i]
+        if (i == 0):
+            continue
+        if ("Rep" in line.split(",")[0] or "CP" in line.split(",")[0] or "Capsid" in line.split(",")[0]):
+            name = line.split(",")[0]
+            sequenceName = line.split(",")[1]
+            length = line.split(",")[2]
+            direction = line.split(",")[3]
+            documentName = line.split(",")[4]
+            type = line.split(",")[5]
+            source = line.split(",")[6]
+            names += [name]
+            sequenceNames += [sequenceName]
+            lengths += [length]
+            directions += [direction]
+            documentNames += [documentName]
+            types += [type]
+            sources += [source]
+    dict = {"Name": names, "Sequence Name": sequenceNames, "Length": lengths, "Direction": directions, "Document Name": documentNames, "Type": types, "Source": sources}
+    df = pd.DataFrame(dict)
+    return dict
+
+def checkPrediction():
+    dict1 = readCSV("875crucisAnnotations.csv")
+    dict2 = genomeSenseTable("879CPs.fasta", "855Reps.fasta")
+
+    commonSense = 0
+    senseTotal = 0
+    incorrectPrediction = []
+    for i in range(len(dict1["Name"])):
+        if ("CP" in dict1["Name"][i] or "Capsid" in dict1["Name"][i]):
+            for l in range(len(dict1["Name"])):
+                if ("Rep" in dict1["Name"][l]):
+                    if (dict1["Sequence Name"][i] == dict1["Sequence Name"][l]):
+                        directionCP = dict1["Direction"][i]
+                        directionRep = dict1["Direction"][l]
+                        if (directionCP == directionRep):
+                            genomeSense = "unisense"
+                        else:
+                            genomeSense = "ambisense"
+                        for m in range(len(dict2["Genome Name"])):
+                            if (dict2["Genome Name"][m] == dict1["Sequence Name"][l]):
+                                genomeSensePrediction = dict2["Genome"][m]
+                                senseTotal += 1
+                                if (genomeSense == genomeSensePrediction):
+                                    commonSense += 1
+                                else:
+                                    incorrectPrediction += [dict1["Sequence Name"][l]]
+    accuracy = commonSense/senseTotal
+    return accuracy, incorrectPrediction
+
