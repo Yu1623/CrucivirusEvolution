@@ -1,4 +1,7 @@
 from readFasta import readFasta
+'''
+Makes a txt.file that contains the ranking of genomes from the highest percent of similarity between CP and Rep to the lowest percent of similarity.
+'''
 
 def CPRepKmerComparisonRank(CPfileName, RepfileName, step):
     CPfile = readFasta(CPfileName)
