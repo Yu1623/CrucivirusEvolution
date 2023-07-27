@@ -1,3 +1,7 @@
+'''
+Purpose: identify the codon bias of CP and Rep genes.
+'''
+
 from readFasta import *
 import matplotlib.pyplot as plt
 import numpy as np
@@ -7,6 +11,7 @@ from matplotlib.patches import Polygon
 Input: file name and gene name
 Output: codons in the gene
 '''
+
 def codonSequence(fileName, geneName):
     file = readFasta(fileName)
     gene = file[geneName]
@@ -21,6 +26,7 @@ def codonSequence(fileName, geneName):
 Input: file name and gene name
 Output: the percentage of nna, nnt, nng, nnc
 '''
+
 def codonEndingFrequency(fileName, geneName):
     codons = codonSequence(fileName, geneName)
     endingA = 0
@@ -48,6 +54,7 @@ def codonEndingFrequency(fileName, geneName):
 Input: file name
 Output: the arrays of percentages of A, T, G, and C
 '''
+
 def codonPreference(fileName):
     file = readFasta(fileName)
     percentagesA = []
@@ -63,8 +70,10 @@ def codonPreference(fileName):
     return percentagesA, percentagesT, percentagesG, percentagesC
     
 '''
-Box plot of percentages nna, nnt, nng, and nnc
+Input: file name
+Output: Box plot of percentages nna, nnt, nng, and nnc
 '''
+
 def codonVisual(fileName):
     percentA, percentT, percentG, percentC = codonPreference(fileName)
     percentNucleotide = [percentA, percentT, percentG, percentC]
@@ -79,7 +88,10 @@ def codonVisual(fileName):
     axis.get_yaxis().tick_left()
     plt.show()
 
-#codonVisual('22Reps.fasta')
+'''
+Input: file names of Rep and CP genes of the same virus type and labels for the graphs.
+Output: two graphs each showing a boxplot of the codon ending percents for comparison.
+'''
 
 def codonCompareVisual(fileName1, fileName2, label1, label2):
     percentA1, percentT1, percentG1, percentC1 = codonPreference(fileName1)
@@ -108,5 +120,3 @@ def codonCompareVisual(fileName1, fileName2, label1, label2):
             patch.set_facecolor(color)
 
     plt.show()
-
-codonCompareVisual('1514RdRPs.fasta', '1526RNA_CPs.fasta', 'RNA Rep', 'RNA CP')
