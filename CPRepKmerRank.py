@@ -1,7 +1,8 @@
+'''
+Makes a txt.file containing the rank of genomes in a file from the genome with the highest percent of similar CP and Rep kmer sequences to the genome with the lowest percent of similarity.
+'''
+
 from readFasta import readFasta
-'''
-Makes a txt.file that contains the ranking of genomes from the highest percent of similarity between CP and Rep to the lowest percent of similarity.
-'''
 
 def CPRepKmerComparisonRank(CPfileName, RepfileName, step):
     CPfile = readFasta(CPfileName)
@@ -43,14 +44,10 @@ def CPRepKmerComparisonRank(CPfileName, RepfileName, step):
         newKmerRank[gene] = kmerRank[gene]
     return newKmerRank
 
-'''
-Example
-'''
-kmerRank = CPRepKmerComparisonRank("DNACPCombine.txt", "DNARepCombine.txt", 7)
-print(kmerRank)
-
-file = open("kmerRankDNA.txt", 'w')
-for geneName in kmerRank:
-    file.write("%s: %s\n" % (geneName.split('_-_')[0], kmerRank[geneName]))
-file.close()
+def writeRank(CPfileName, RepfileName, step):
+    kmerRank = CPRepKmerComparisonRank(CPfileName, RepfileName, step)
+    file = open("kmerRankDNA.txt", 'w')
+    for geneName in kmerRank:
+        file.write("%s: %s\n" % (geneName.split('_-_')[0], kmerRank[geneName]))
+    file.close()
 
