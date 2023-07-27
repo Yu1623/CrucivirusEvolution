@@ -172,9 +172,9 @@ def readCSV(fileName):
 Checks for the accuracy of the predictions of the genome sense and outputs the accuracy and an array of genomes that are have wrong predictions.
 '''
 
-def checkPrediction():
-    dict1 = readCSV("875crucisAnnotations.csv")
-    dict2 = genomeSenseTable("879CPs.fasta", "855Reps.fasta")
+def checkPrediction(csvfileName, CPfileName, RepfileName):
+    dict1 = readCSV(csvfileName)
+    dict2 = genomeSenseTable(CPfileName, RepfileName)
 
     commonSense = 0
     senseTotal = 0
