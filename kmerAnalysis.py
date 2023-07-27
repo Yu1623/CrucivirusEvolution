@@ -1,13 +1,13 @@
+'''
+Graphs of kmer sequences and the number of times they appear in a genome. 
+Compare kmer sequences of genomes
+'''
+
 from readFasta import *
 import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.patches import Polygon
 
-#Go to countGenomeVisual() to create a chart that can be interacted with
-
-'''
-Gene
-'''
 def kmerSequence(fileName, geneName, step):
     file = readFasta(fileName)
     gene = file[geneName]
@@ -52,11 +52,6 @@ def countVisual(fileName, geneName, step):
     plt.ylabel("Count")
     plt.show()
 
-
-'''
-Genome
-'''
-
 def kmerGenomeCount(fileName, step):
     file = readFasta(fileName)
     kmerSequenceArray = {}
@@ -89,9 +84,6 @@ def findKmerWithCount(fileName, step, count):
             kmerSequence += [kmer]
     return kmerSequence
 
-
-# file name is the name of the data set
-# step is the length of the sequence
 def countGenomeVisual(fileName, step):
     countsArray = countGenome(fileName, step)
     counts = []
@@ -137,8 +129,6 @@ def countGenomeVisual(fileName, step):
     plt.ylabel("Count")
     plt.show()
 
-#countGenomeVisual('22CPs.fasta', 5)
-
 def countCompareGenomeVisual(fileName1, fileName2, step):
     countsArray1 = countGenome(fileName1, step)
     countsArray2 = countGenome(fileName2, step)
@@ -163,7 +153,47 @@ def countCompareGenomeVisual(fileName1, fileName2, step):
     plt.ylabel("Count")
     plt.show()
 
-countCompareGenomeVisual('1514RdRPs.fasta', '1526RNA_CPs.fasta', 7)
+def compareGenomeCountSameChart(fileName1, fileName2, step):
+    countsArray1 = countGenome(fileName1, step)
+    countsArray2 = countGenome(fileName2, step)
+    counts1 = []
+    frequencies1 = []
+    counts2 = []
+    frequencies2 = []
+    for count in countsArray1:
+        counts1 += [count]
+        frequencies1 += [countsArray1[count]]
+    for count in countsArray2:
+        counts2 += [count]
+        frequencies2 += [countsArray2[count]]
+    plt.scatter(frequencies1, counts1)
+    plt.scatter(frequencies2, counts2)
+    plt.legend(['CP', 'Rep'])
+    plt.xlabel("Frequency")
+    plt.ylabel("Count")
+    plt.show()
+
+def genomeCountDotCompare(fileName1, fileName2, step):
+    kmerCount1 = kmerGenomeCount(fileName1, step)
+    kmerCount2 = kmerGenomeCount(fileName2, step)
+    counts1 = []
+    kmers1 = []
+    counts2 = []
+    kmers2 = []
+    for kmer in kmerCount1:
+        counts1 += [kmerCount1[kmer]]
+        kmers1 += [kmer]
+    for kmer in kmerCount2:
+        counts2 += [kmerCount2[kmer]]
+        kmers2 += [kmer]
+    
+    figure = go.Figure()
+    figure.add_trace(go.Scatter(x = counts1, y = kmers1, name = 'Counts of Kmer Sequences CP', marker = dict(color = 'rgba(156, 165, 196, 0.94)', line_color = 'rgba(156, 165, 196, 1.2)')))
+    figure.update_traces(mode = 'markers', marker = dict(line_width = 1, symbol = 'circle', size = 16))
+    figure.add_trace(go.Scatter(x = counts2, y = kmers2, name = 'Counts of Kmer Sequence Rep', marker = dict(color = 'rgb(88, 123, 204)', line_color = 'rgba(217, 217, 217, 1.2)')))
+    figure.update_traces(mode = 'markers', marker = dict(line_width = 1, symbol = 'circle', size = 10))
+    figure.update_layout(title = "The number of times each kmer sequence appear in the gene", xaxis=dict(showgrid = False, showline = True, linecolor = 'rgb(102, 102, 101)', tickfont_color = 'rgb(102, 102, 101)', showticklabels = True, dtick = 'outside', tickcolor = 'rgb(102, 102, 101)'), margin = dict(l = 140, r = 40, b = 50, t = 80), legend = dict(font_size = 10, yanchor = 'middle', xanchor = 'right'), width = 800, height = 600, paper_bgcolor = 'white', plot_bgcolor = "white", hovermode = 'closest')
+    figure.show()
 
 def countMaxMin(fileName, step):
     kmerArray = kmerGenomeCount(fileName, step)
@@ -183,8 +213,3 @@ def countMaxMin(fileName, step):
         if (kmerArray[kmer] == maxCount):
             maxKmerFrequency += [kmer]
     return maxKmerFrequency, maxCount
-
-#countMaxMin("newRNA.txt", 8)
-#print(kmerGenomeCount("newRNA.txt", 8))
-#print(countGenome('newRNA.txt', 8))
-#print("The highest frequency of RNA is ", maxCount, " of", maxKmerFrequency)
