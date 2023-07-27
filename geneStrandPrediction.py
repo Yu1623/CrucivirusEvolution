@@ -10,6 +10,11 @@ import pandas as pd
 from IPython.display import display
 from tabulate import tabulate
 
+'''
+Input: file name and the gene name that makes the path to the gene that the program will predict the orientation of.
+Output: the codon ending bias, which indicates the orientation, and the percent of codons ending in a and the percent ending in t
+'''
+
 def geneStrandPrediction(fileName, geneName):
     genes = readFasta(fileName)
     gene = genes[geneName]
@@ -61,6 +66,11 @@ def geneStrandPrediction(fileName, geneName):
                 bias = "C"
     return bias, percenta, percentt
 
+'''
+Input: file name of the genes that will be predicted
+Output: an associative array giving each gene and their corresponding codon-ending preference.
+'''
+
 def geneStrandsPrediction(fileName):
     genes = readFasta(fileName)
     biases = {}
@@ -68,6 +78,11 @@ def geneStrandsPrediction(fileName):
         bias, percenta, percentt = geneStrandPrediction(fileName, geneName)
         biases[geneName] = bias
     return biases
+
+'''
+Input: CP file name and Rep file name
+Output: an associative array that stores the genome names and the sense of the genomes.
+'''
 
 def genomeSensePrediction(CPfileName, RepfileName):
     CPbiases = geneStrandsPrediction(CPfileName)
@@ -115,6 +130,11 @@ def genomeSenseTable(CPfile, Repfile):
     df = pd.DataFrame(dict)
     return dict
 
+'''
+Input: file name of the csv file that has the actual sense of the genomes.
+Output: a matrix with the information from the csv file.
+'''
+
 def readCSV(fileName):
     f = open(fileName, 'r')
     lines = f.readlines()
@@ -147,6 +167,10 @@ def readCSV(fileName):
     dict = {"Name": names, "Sequence Name": sequenceNames, "Length": lengths, "Direction": directions, "Document Name": documentNames, "Type": types, "Source": sources}
     df = pd.DataFrame(dict)
     return dict
+
+'''
+Checks for the accuracy of the predictions of the genome sense and outputs the accuracy and an array of genomes that are have wrong predictions.
+'''
 
 def checkPrediction():
     dict1 = readCSV("875crucisAnnotations.csv")
