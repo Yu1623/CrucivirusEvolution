@@ -81,6 +81,7 @@ def pairwiseVisual(CPfileName, RepfileName, step):
         print(label)
         labelsx += [label.split(", ")[1].split("_-_")[0]]
     sns.heatmap(df1, vmin = 6.22e-05, vmax = 0.0008637, cmap = "terrain", xticklabels=labelsx, yticklabels=labelsy)
+    plt.title("Heat map of the Pairwise Comparison of CP Genes")
     plt.show()
     
     percents, labels, genes = pairwise("22Reps.fasta", 7)
@@ -92,13 +93,16 @@ def pairwiseVisual(CPfileName, RepfileName, step):
     for label in labels[-1][:]:
         labelsx += [label.split(", ")[1].split("_-_")[0]]
     sns.heatmap(df2, vmin=6e-05, vmax = 0.000864, cmap = 'terrain', xticklabels=labelsx, yticklabels=labelsy)
+    plt.title("Heat map of the Pairwise Comparison of Rep Genes")
     plt.show()
 
     temp = hierarchy.linkage(df1, method = 'ward')
     dn1 = hierarchy.dendrogram(temp, above_threshold_color='green', color_threshold=0.7, leaf_rotation = 45, labels=labelsx)
+    plt.title("Capsid-Protein Genes Pairwise Comparison")
     plt.show()
     
     temp = hierarchy.linkage(df2, method = 'ward')
     hierarchy.set_link_color_palette(['#174b20', ' #82a19d '])
     dn2 = hierarchy.dendrogram(temp, above_threshold_color='blue', color_threshold=0.7, leaf_rotation = 45, labels = labelsx)
+    plt.title("Replication-Protein Genes Pairwise Comparison")
     plt.show()
