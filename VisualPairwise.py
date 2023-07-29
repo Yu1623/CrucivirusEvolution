@@ -71,6 +71,8 @@ Please note that the program is very slow in running through the genes for large
 def pairwiseVisual(CPfileName, RepfileName, step):
     percents, labels, genes = pairwise("22CPs.fasta", 7)
     df1 = pd.DataFrame(percents)
+    corr1 = df1.corr()
+    mask1 = np.triu(np.ones_like(corr1, dtype = bool))
     labelsy = []
     labelsx = []
     for label in labels[:][-1]:
@@ -80,19 +82,21 @@ def pairwiseVisual(CPfileName, RepfileName, step):
     for label in labels[-1][:]:
         print(label)
         labelsx += [label.split(", ")[1].split("_-_")[0]]
-    sns.heatmap(df1, vmin = 6.22e-05, vmax = 0.0008637, cmap = "terrain", xticklabels=labelsx, yticklabels=labelsy)
+    sns.heatmap(df1, vmin = 6.22e-05, vmax = 0.0008637, mask = mask1, cmap = "terrain", xticklabels=labelsx, yticklabels=labelsy)
     plt.title("Heat map of the Pairwise Comparison of CP Genes")
     plt.show()
     
     percents, labels, genes = pairwise("22Reps.fasta", 7)
     df2 = pd.DataFrame(percents)
+    corr2 = df2.corr()
+    mask2 = np.triu(np.ones_like(corr2, dtype = bool))
     labelsy = []
     labelsx = []
     for label in labels[:][-1]:
         labelsy += [label.split(", ")[1].split("_-_")[0]]
     for label in labels[-1][:]:
         labelsx += [label.split(", ")[1].split("_-_")[0]]
-    sns.heatmap(df2, vmin=6e-05, vmax = 0.000864, cmap = 'terrain', xticklabels=labelsx, yticklabels=labelsy)
+    sns.heatmap(df2, vmin=6e-05, vmax = 0.000864, mask = mask2, cmap = 'terrain', xticklabels=labelsx, yticklabels=labelsy)
     plt.title("Heat map of the Pairwise Comparison of Rep Genes")
     plt.show()
 
