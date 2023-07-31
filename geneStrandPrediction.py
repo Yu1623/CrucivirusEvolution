@@ -127,7 +127,7 @@ def genomeSenseTable(CPfile, Repfile):
     columns = ['Genome name', 'CP', 'Rep', 'Genome']
     dict = {'Genome Name': genomeNames, 'CP': CPgenes, 'Rep': Repgenes, 'Genome': GenomeSense}
     df = pd.DataFrame(dict)
-    print(df.to_markdown())
+    df.to_markdown()
     return dict
 
 '''
