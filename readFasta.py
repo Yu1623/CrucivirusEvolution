@@ -1,9 +1,8 @@
 import re
 import sys
 
-path = "/home/yuxuan/Summer Internship/Datasets/"
 def readFasta(fileName):
-    f = open(path + fileName, 'r')
+    f = open(fileName, 'r')
     lines = f.readlines()
     hre = re.compile('>(\S+)')
     lre = re.compile('^(\S+)$')
