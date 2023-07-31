@@ -13,6 +13,11 @@ Input: file name and the gene name that makes the path to the gene that the prog
 Output: the codon ending bias, which indicates the orientation, and the percent of codons ending in a and the percent ending in t
 '''
 
+def main():
+    dict = genomeSenseTable("879CPs.fasta", "855Reps.fasta")
+    df = pd.DataFrame(dict)
+    print(df.to_markdown())
+    
 def geneStrandPrediction(fileName, geneName):
     genes = readFasta(fileName)
     gene = genes[geneName]
@@ -109,7 +114,7 @@ def genomeSensePrediction(CPfileName, RepfileName):
     return percentAmbisense, CPgenes, Repgenes, GenomeSense, genomeNames
 
 def genomeSenseTable(CPfile, Repfile):
-    CPgenes, Repgenes, GenomeSense, genomeNames, CPending, Repending = genomeSensePrediction(CPfile, Repfile)
+    percentAmbisense, CPgenes, Repgenes, GenomeSense, genomeNames = genomeSensePrediction(CPfile, Repfile)
     rows = []
     for genome in genomeNames:
         rows += [genome]
@@ -199,3 +204,4 @@ def checkPrediction(csvfileName, CPfileName, RepfileName):
     accuracy = commonSense/senseTotal
     return accuracy, incorrectPrediction
 
+main()
