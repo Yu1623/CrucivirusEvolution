@@ -5,6 +5,13 @@ Purpose: create a line plot of the shared kmer sequences and their count between
 from readFasta import readFasta
 import matplotlib.pyplot as plt
 
+def main():
+    genomeskmerMatchVisual("885crucis.fasta", "316CRESS.fasta", "Cruci_CruV_88", "AlphaS_KT948075", 7)
+    genomeskmerMatchVisual("885crucis.fasta", "316CRESS.fasta", "Cruci_CruV_88", "AlphaS_KF471057", 7)
+    genomeskmerMatchVisual("885crucis.fasta", "316CRESS.fasta", "Cruci_CruCGE_296", "Bacil_MH617605", 7)
+    genomeskmerMatchVisual("885crucis.fasta", "316CRESS.fasta", "Cruci_CruV_87", "Bacil_AB193315", 7)
+
+
 '''
 Input: names of two files and names of two genes, length of kmer
 Output: arrays of kmer sequences
@@ -76,7 +83,6 @@ def genomeskmerMatchVisual(fileName1, fileName2, genomeName1, genomeName2, step)
     #plt.ylim(0, 8)
     plt.show()
     print(kmerCounts)
-genomeskmerMatchVisual("885crucis.fasta", "316CRESS.fasta", "Cruci_CruV_88", "AlphaS_KT948075", 7)
-    
 
 
+main()
