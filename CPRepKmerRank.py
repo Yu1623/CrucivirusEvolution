@@ -44,9 +44,9 @@ def CPRepKmerComparisonRank(CPfileName, RepfileName, step):
         newKmerRank[gene] = kmerRank[gene]
     return newKmerRank
 
-def writeRank(CPfileName, RepfileName, step):
+def writeRank(CPfileName, RepfileName, step, name):
     kmerRank = CPRepKmerComparisonRank(CPfileName, RepfileName, step)
-    file = open("kmerRankDNA.txt", 'w')
+    file = open("kmerRank%s.txt" % (name), 'w')
     for geneName in kmerRank:
         file.write("%s: %s\n" % (geneName.split('_-_')[0], kmerRank[geneName]))
     file.close()
