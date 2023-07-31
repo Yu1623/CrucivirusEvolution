@@ -20,16 +20,10 @@ We employed the following analyses:
 We found the codon-ending preferences of each Capsid and Rep gene of our datasets. We compared the preferences of the Capsid and Rep gene of the same genome. If they have the same codon bias, the genome is unisense. Otherwise, it is ambisense. Horizontal gene transfers, which could possibily have occured between viruses and changed the composition of gene sequences of crucivirus, could have affected the sense of the crucivirus. Thus, by predicting the sense of each genome, we could observe a pattern of horizontal gene transfer. We showed the results on a table, composing of the name of the genome, the codon-ending bias of the CP gene, the codon bias of the Rep gene, and the sense of the genome. The accuracy of our program and the incorrect predictions allows us to find which genomes are incorrrectly predicted. Genetic strands that have coexisted in the same virus accumulate mutations at different speeds. Genetic strands that have been recently included into a virus due to genetic transfer do not have enough time to accumulate the mutations. This causes the recently acquired sequences to exhibit surprising orientations of genes. Out of all of the incorrect predictions, we identified genomes that have nnt percentages and nna percentages that are very different from each other, such as 0.05 apart, for capsid and/or rep genes. These genomes may have recent horizontal genetic transfers, which is a possible reason for why the orientation of the genes are unexpected.
 
 Procedure:
-
-Step 1: If you are interested in the genome-sense predictions, please use the genomeSenseTable() function from geneStrandPrediction.py and input the CP file name and Rep file name of the genomes that you want to predict the sense of. This gives you a table containing the genome names, the codon-ending preference of CP gene, the codon-ending preference of Rep gene, and the sense of the genome. 
+The following command line gives you a table containing the genome names, the codon-ending preference of CP gene, the codon-ending preference of Rep gene, and the sense of the genome.
+It also gives you the number of unexpected genome senses and a list of the names of the genomes.
 ```
-genomeSenseTable("879CPs.fasta", "855Reps.fasta")
-```
-
-Step 2: Please use the genomeSenseSurprising() function from checkGenomeSensePrediction.py and input the csv. file name that contains the actual genome senses, the CP file name, and the Rep file name of the genomes that you want to predict the sense. This gives you the number of genomes that has surprising and unexpected genome sense, mainly those with percents of nnt and nna that are at least 0.05 apart for CP and/or Rep genes, and an array of the genome names.
-```
-countOfUnexpectedGenomes, genomesWithUnexpectedSense = genomeSenseSurprising("875crucisAnnotations.csv", "879CPs.fasta", "855Reps.fasta")
-print(countOfUnexpectedGenomes, genomesWithUnexpectedSense)
+python3 checkGenomeSensePrediction.py
 ```
 
 2. Pairwise comparison
@@ -37,10 +31,9 @@ print(countOfUnexpectedGenomes, genomesWithUnexpectedSense)
 We used pairwise analysis to compare the kmer composition in between crucivurs capsids and reps. We calculated the percentage of matching kmer sequences of differing lengths of all capsid genes with all capsid genes (including to themselves) and the same for rep genes. These data are visualized using heatmaps and dendrograms. The dendrograms give predictions of the relationship and evolution of capsid genes and rep genes in crucivirus. We can analyze the pattern of evolution of capsid and rep to determine if the two genes have coexisted in the same crucivirus for a long period of time.
 
 Procedure:
-
-Step 1: Use the pairwiseVisual() function from VisualPairwise.py by inputting the file names of the CP and Rep genes that you want to do the pairwise comparison with and the length of kmer. Make sure that the CP and Rep genes are of the same virus type. This gives you four graphs: two heatmaps and two dendrograms for CP and Rep separately. 
+The following command line gives you two heat maps and two dendrograms. One heat map and one dendrogram show the pairwise comparison among crucivirus CP genes. The other heat map and dendrogram show the pairwise comparison among crucivirus Rep genes.
 ```
-pairwiseVisual("879CPS.fasta", "855Reps.fasta", 7)
+python3 VisualPairwise.py
 ```
 3. Kmer rank for the similarity of CP and Rep genes
 
@@ -48,19 +41,14 @@ We proposed that the more similar two genes are, the higher the probability that
 
 Procedure:
 
-Step 1: Input the CP and Rep file names of the genome data set that you want to predict the sense of and the length of kmer into the writeRank() function in CPRepKmerRank.py. This creats a txt. file containing the rank of percents of shared kmer sequences between CP and Rep from the genome with the highest percent to the genome with the lowest percent. If you want to make graphs for all three virus types, repeat this step three times for crucivirus, RNA virus, and DNA virus.
+Step 1: This command line gives you ranks of the percentages of similar k-mers between CP and Rep genes of crucivirus, RNA, and DNA genomes.
 ```
-writeRank("879CPs.fasta", "855Reps.fasta", 7, "Cruci")
-writeRank("1526RNA_CPs.fasta", "1514RdRPs.fasta", 7, "RNA")
-writeRank("270CRESS_CPs.fasta", "305CRESS_Reps.fasta", 7, "DNA")
+python3 CPRepKmerRank.py
 ```
 
-Step 2: If you only want to see the percents of similar kmer sequences between CP and Rep for one virus type, input the file name for the kmer rank file that you made in the previous step into the function kmerCPRepVisual() from KmerRankCPRepVisual.py. If you want to see the percents of similar kmer sequences between CP and Rep for all three virus types, crucivirus, RNA, DNA, input the file names of the crucivirus kmer rank, RNA kmer rank, and DNA kmer rank that you can make by following step 1 into kmerCPRepCompareVisual() function from KmerRankCPRepVisual.py.
+Step 2: This command line gives you line plots of the number of percentages of similar k-mers between CP and Rep and their corresponding count.
 ```
-kmerCPRepVisual(kmerRankCruci)
-kmerCPRepVisual(kmerRankRNA)
-kmerCPRepVisual(kmerRankDNA)
-kmerCPRepCompareVisual(kmerRankCruci, kmerRankRNA, kmerRankDNA)
+python3 KmerRankCPRepVisual.py
 ```
 
 4. Comparison of kmer sequences between genomes
@@ -69,17 +57,14 @@ Kmer sequences could be used to see horizontal genetic transfer between genomes.
 
 Procedure:
 
-Step 1: Please use the virusKmerVisual() function from virusMatchingKmer.py by inputting the DNA genomes dataset file name and the crucivirus genomes dataset file name and the length of kmer. This makes a heatmap with each cell representing the percent of matching kmer sequences between a pair of DNA and crucivirus genomes. 
+Step 1: This command line makes a heat map with each cell representing the percentage of similar k-mers between a pair of crucivirus and DNA genomes.
 ```
-virusKmerVisual("316CRESS.fasta", "885crucis.fasta", 7)
+python virusMatchingKmer.py
 ```
 
-Step 2: Pick the genome pairs with the highest similarity and the lowest simmilarity. The highest similarity is represented by the lightest color and the lowest similarity is the darkest color. For each genome pair, input the file name of the first genome, the file name of the second genome, the genome name of the first genome, the name of the second genome, and the length of kmer into the genomeskmerMatchVisual() function from genomesMatchingKmers.py. This gives you a line graph showing every shared kmer sequence against the count that they showed up in both genomes and an horizontal line representing the average count.
+Step 2: This command line gives you four line plots, each showing the shared k-mers between the two genomes of the crucivirus-DNA pair and the number of times each k-mer appeared in both genomes. The first two are for genome pairs with high similarity and the last two are for genome pairs with low similarity.
 ```
-genomeskmerMatchVisual("885crucis.fasta", "316CRESS.fasta", "Cruci_CruV_88", "AlphaS_KT948075", 7)
-genomeskmerMatchVisual("885crucis.fasta", "316CRESS.fasta", "Cruci_CruV_88", "AlphaS_KF471057", 7)
-genomeskmerMatchVisual("885crucis.fasta", "316CRESS.fasta", "Cruci_CruCGE_296", "Bacil_MH617605", 7)
-genomeskmerMatchVisual("885crucis.fasta", "316CRESS.fasta", "Cruci_CruV_87", "Bacil_AB193315", 7)
+python3 genomesMatchingKmers.py
 ```
 
 This project is licensed under GNU General Public license Version 3.
