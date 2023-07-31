@@ -9,6 +9,9 @@ import numpy as np
 import seaborn as sns
 from scipy.cluster import hierarchy
 
+def main():
+    pairwiseVisual("879CPS.fasta", "855Reps.fasta", 7)
+
 '''
 This program gets the percents of similar kmers with length 'step' between every possible pair of genes in the file, the labels, or the names of the genes, and the gene sequences.
 '''
@@ -110,3 +113,5 @@ def pairwiseVisual(CPfileName, RepfileName, step):
     dn2 = hierarchy.dendrogram(temp, above_threshold_color='blue', color_threshold=0.7, leaf_rotation = 45, labels = labelsx)
     plt.title("Replication-Protein Genes Pairwise Comparison")
     plt.show()
+
+main()
