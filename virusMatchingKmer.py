@@ -6,6 +6,10 @@ from readFasta import readFasta
 import seaborn as sns
 import matplotlib.pyplot as plt
 
+def main():
+    virusKmerVisual("316CRESS.fasta", "885crucis.fasta", 7)
+
+
 '''
 Input: DNA file name, crucivirus file name, and length of kmer
 Output: matrix of the percents of shared kmer sequences between each pair of DNA and crucivirus genomes and the names of DNA genomes and the names of crucivirus genomes
@@ -80,9 +84,6 @@ def virusKmerVisual(DNAfileName, CrucifileName, step):
     plt.ylabel("DNA")
     plt.title("Comparison of kmer sequences between DNA and Cruci genomes")
     plt.show()
-
-virusKmerVisual("316CRESS.fasta", "885crucis.fasta", 7)
-
     
 
-
+main()
