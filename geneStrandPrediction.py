@@ -7,8 +7,6 @@ from readFasta import readFasta
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
-from IPython.display import display
-from tabulate import tabulate
 
 '''
 Input: file name and the gene name that makes the path to the gene that the program will predict the orientation of.
