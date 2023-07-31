@@ -31,7 +31,6 @@ def genomeSenseSurprising(csvfileName, CPfileName, RepfileName):
         CPbias, CPpercenta, CPpercentt = geneStrandPrediction.geneStrandPrediction("879CPs.fasta", geneNameCP)
         Repbias, Reppercenta, Reppercentt = geneStrandPrediction.geneStrandPrediction("855Reps.fasta", geneNameRep)
         if ((abs(CPpercenta - CPpercentt) > 0.05) and (abs(Reppercenta - Reppercentt) > 0.05)):
-            #print("CP %s percenta: %s, percentt: %s \nRep %s percenta: %s, percentt: %s" % (geneNameCP, CPpercenta, CPpercentt, geneNameRep, Reppercenta, Reppercentt))
             percentsSimilar += 1
             genomeSimilar += [genome]
     return percentsSimilar, genomeSimilar
