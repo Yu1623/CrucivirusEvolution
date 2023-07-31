@@ -81,3 +81,5 @@ genomeskmerMatchVisual("885crucis.fasta", "316CRESS.fasta", "Cruci_CruV_88", "Al
 genomeskmerMatchVisual("885crucis.fasta", "316CRESS.fasta", "Cruci_CruCGE_296", "Bacil_MH617605", 7)
 genomeskmerMatchVisual("885crucis.fasta", "316CRESS.fasta", "Cruci_CruV_87", "Bacil_AB193315", 7)
 ```
+
+This project is licensed under GNU General Public license Version 3.
