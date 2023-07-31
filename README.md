@@ -59,7 +59,7 @@ Procedure:
 
 Step 1: This command line makes a heat map with each cell representing the percentage of similar k-mers between a pair of crucivirus and DNA genomes.
 ```
-python virusMatchingKmer.py
+python3 virusMatchingKmer.py
 ```
 
 Step 2: This command line gives you four line plots, each showing the shared k-mers between the two genomes of the crucivirus-DNA pair and the number of times each k-mer appeared in both genomes. The first two are for genome pairs with high similarity and the last two are for genome pairs with low similarity.
