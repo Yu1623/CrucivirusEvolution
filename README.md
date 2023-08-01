@@ -1,7 +1,7 @@
 # ICR_CrucivirusEvolution
 This project examines the use of alignment-free analyses in understanding the evolution of crucivirus.
 
-Our programs require the following installments: matplotlib, scipy, seaborn, plotly, pylab, pandas, and numpy
+Our programs require the following installments: matplotlib, scipy, seaborn, plotly, pylab, tabulate, pandas, and numpy
 
 How to install:
 ```
@@ -12,6 +12,7 @@ pip install plotly
 pip install pylab
 pip install pandas
 pip install numpy
+pip install tabulate
 ```
 
 We employed the following analyses:
