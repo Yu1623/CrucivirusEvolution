@@ -1,2 +1,1 @@
-*.txt linguistic-vendored=true
-*.py linguistic-vendored=false
+*linguistic-vendored
