@@ -1,2 +1,2 @@
-*.txt linguisted-vendored
-*.bst linguisted-vendored
+linguisted-vendored
+Code/*.py linguisted-vendored=false
